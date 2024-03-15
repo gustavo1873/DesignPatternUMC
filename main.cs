@@ -8,114 +8,88 @@ class Program
 {
     public static void Main(string[] args)
     {
+        Singleton s1 = Singleton.getInstance();
 
-        //string cs = @"server=sql.freedb.tech;userid=freedb_aluno;password=&ta2Vz@C5?EnXbD;database=freedb_db_aula01";
-
-        using var con = new MySqlConnection();
-        try
+        Conexao conexao = new Conexao("sql.freedb.tech", "freedb_aluno", "&ta2Vz@C5?EnXbD", "freedb_db_aula01");
+        using (MySqlConnection connection = conexao.abrirConexao())
         {
-            con.Open();
-            Console.WriteLine($"MySQL version : {con.ServerVersion}");
-        }
-        catch (System.Exception e)
-        {
-            Console.WriteLine(e.Message.ToString());
-        }
-
-        if (con.State == ConnectionState.Open)
-        {
-            Console.WriteLine("Connected!");
-            //using var cmd = new MySqlCommand(sql, con);
-            //using MySqlDataReader rdr = cmd.ExecuteReader();
-            //Console.WriteLine($"{rdr.GetName(0),-4} {rdr.GetName(1),-10} {rdr.GetName(2),10}");
-            //cmd.CommandText = @"CREATE TABLE Teste ( teste                  varchar(100) PRIMARY KEY);";
-            //cmd.ExecuteNonQuery();
-        }
-
-
-
-
-        Console.WriteLine("Escolha uma das opções abaixo: ");
-
-        Console.WriteLine("1- Listar livros ");
-        Console.WriteLine("2- Cadastrar livro ");
-        Console.WriteLine("3- Atualizar livro ");
-        Console.WriteLine("4- Excluir livro");
-        Console.WriteLine("5- Listar aluno");
-        Console.WriteLine("6- Cadastrar aluno");
-        Console.WriteLine("7- Atualizar aluno");
-        Console.WriteLine("8- Excluir aluno");
-        Console.WriteLine("9- SAIR");
-
-        bool running = true;
-        while (running)
-        {
-            Console.Write("Opção: ");
-            string option = Console.ReadLine();
-
-            switch (option)
+            if (connection != null)
             {
-                case "1": ListarLivros(con); break;
-                case "2":
-                    Console.WriteLine("Digite o título do livro:");
-                    string tituloLivro = Console.ReadLine();
+                Console.WriteLine("Conexão aberta com sucesso!");
+            }
 
-                    Console.WriteLine("Digite o autor do livro:");
-                    string autorLivro = Console.ReadLine();
+            s1.menu();
 
-                    Console.WriteLine("Digite o gênero do livro:");
-                    string generoLivro = Console.ReadLine();
+            bool running = true;
+            while (running)
+            {
+                Console.Write("Opção: ");
+                string option = Console.ReadLine();
 
-                    Console.WriteLine("Digite o ISBN do livro:");
-                    string isbnLivro = Console.ReadLine();
+                switch (option)
+                {
+                    case "1": ListarLivros(connection); break;
+                    case "2":
+                        Console.WriteLine("Digite o título do livro:");
+                        string tituloLivro = Console.ReadLine();
 
-                    Console.WriteLine("Digite o ano do livro:");
-                    int anoLivro = int.Parse(Console.ReadLine());
+                        Console.WriteLine("Digite o autor do livro:");
+                        string autorLivro = Console.ReadLine();
 
-                    Console.WriteLine("Digite a quantidade do livro:");
-                    int quantidadeLivro = int.Parse(Console.ReadLine());
+                        Console.WriteLine("Digite o gênero do livro:");
+                        string generoLivro = Console.ReadLine();
 
-                    Console.WriteLine("Edição: ");
-                    int edicao = int.Parse(Console.ReadLine());
+                        Console.WriteLine("Digite o ISBN do livro:");
+                        string isbnLivro = Console.ReadLine();
 
-                    CadastrarLivro(con, tituloLivro, autorLivro, generoLivro, isbnLivro, anoLivro, quantidadeLivro, edicao);
-                    break;
+                        Console.WriteLine("Digite o ano do livro:");
+                        int anoLivro = int.Parse(Console.ReadLine());
 
-                case "3": AtualizarLivro(con); break;
-                case "4": RemoverLivro(con); break;
-                case "5": ListarAlunos(con); break;
-                case "6":
-                    Console.WriteLine("Digite o nome do aluno:");
-                    string nome = Console.ReadLine();
+                        Console.WriteLine("Digite a quantidade do livro:");
+                        int quantidadeLivro = int.Parse(Console.ReadLine());
 
-                    Console.WriteLine("Digite o RGM do aluno:");
-                    string rgm = Console.ReadLine();
+                        Console.WriteLine("Edição: ");
+                        int edicao = int.Parse(Console.ReadLine());
 
-                    Console.WriteLine("Digite a data de nascimento do aluno (dd/mm/yyyy):");
-                    DateTime dataNascimento = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                        CadastrarLivro(connection, tituloLivro, autorLivro, generoLivro, isbnLivro, anoLivro, quantidadeLivro, edicao);
+                        break;
 
-                    Console.WriteLine("Digite o curso do aluno:");
-                    string curso = Console.ReadLine();
+                    case "3": AtualizarLivro(connection); break;
+                    case "4": RemoverLivro(connection); break;
+                    case "5": ListarAlunos(connection); break;
+                    case "6":
+                        Console.WriteLine("Digite o nome do aluno:");
+                        string nome = Console.ReadLine();
 
-                    Console.WriteLine("Digite o RG do aluno:");
-                    string rg = Console.ReadLine();
+                        Console.WriteLine("Digite o RGM do aluno:");
+                        string rgm = Console.ReadLine();
 
-                    Console.WriteLine("Digite o gênero do aluno:");
-                    string genero = Console.ReadLine();
+                        Console.WriteLine("Digite a data de nascimento do aluno (dd/mm/yyyy):");
+                        DateTime dataNascimento = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy", CultureInfo.InvariantCulture);
 
-                    Console.WriteLine("O aluno é bolsista? (sim ou nao):");
-                    bool bolsista = Console.ReadLine().Equals("sim", StringComparison.OrdinalIgnoreCase);
+                        Console.WriteLine("Digite o curso do aluno:");
+                        string curso = Console.ReadLine();
 
-                    CadastrarAluno(con, nome, rgm, dataNascimento, curso, rg, genero, bolsista);
-                    break;
-                case "7": AtualizarAluno(con); break;
-                case "8": RemoverAluno(con); break;
-                case "9": running = false; break;
-                default: Console.WriteLine("Opção inválida!"); break;
+                        Console.WriteLine("Digite o RG do aluno:");
+                        string rg = Console.ReadLine();
+
+                        Console.WriteLine("Digite o gênero do aluno:");
+                        string genero = Console.ReadLine();
+
+                        Console.WriteLine("O aluno é bolsista? (sim ou nao):");
+                        bool bolsista = Console.ReadLine().Equals("sim", StringComparison.OrdinalIgnoreCase);
+
+                        CadastrarAluno(connection, nome, rgm, dataNascimento, curso, rg, genero, bolsista);
+                        break;
+                    case "7": AtualizarAluno(connection); break;
+                    case "8": RemoverAluno(connection); break;
+                    case "9": running = false; break;
+                    default: Console.WriteLine("Opção inválida!"); break;
+                }
             }
         }
+        conexao.fecharConexao();
 
-        con.Close();
     }
 
     static void ExecutarComando(MySqlConnection connection, string sql, Dictionary<string, object> parameters = null)
