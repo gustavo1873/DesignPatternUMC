@@ -9,21 +9,31 @@ class Program
         Biblioteca biblioteca = new Biblioteca();
         Secretaria secretaria = new Secretaria();
 
-        Conexao conexao = new Conexao("sql.freedb.tech", "freedb_aluno", "&ta2Vz@C5?EnXbD", "freedb_db_aula01");
+        Conexao conexao = new Conexao("sql.freedb.tech", "freedb_werek", "s&hsGGk%p%V#XE5", "freedb_freedb_umc_5b_24");
         using (MySqlConnection connection = conexao.abrirConexao())
         {
             if (connection != null)
             {
-                Console.WriteLine("Conexão aberta com sucesso!");
+                Console.WriteLine("Conexão aberta com sucesso!\n\n");
             }
 
-            s1.showMenu("key");
-            biblioteca.showMenu(connection, "key");
-            secretaria.showMenu(connection, "key");
+            s1.showMenu("MAIN_MENU");
+            string key = Console.ReadLine();
+            switch (key)
+            {
+                case "1":
+                    key = s1.showMenu("MENU_BIBLIOTECA");
+                    biblioteca.showMenu(connection, key);
+                    break;
+                case "2":
+                    key = s1.showMenu("MENU_SECRETARIA");
+                    secretaria.showMenu(connection, key);
+                    break;
+
+            }
+
         }
         conexao.fecharConexao();
-
     }
 
 }
-
