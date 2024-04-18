@@ -4,20 +4,20 @@ using System.Data;
 using MySql.Data.MySqlClient;
 using System.Globalization;
 
-class Secretaria
+class Secretaria : MenuTemplate
 {
-    public void showMenu(MySqlConnection connection, string key)
+    public override string ExecutarAcoes(MySqlConnection connection, string key)
     {
         bool running = true;
+            Console.Write("Opção: ");
         while (running)
         {
-            Console.Write("Opção: ");
             string option = Console.ReadLine();
 
             switch (option)
             {
-                case "5": ListarAlunos(connection); break;
-                case "6":
+            case "1": ListarAlunos(connection); break;
+            case "2":
                     Console.WriteLine("Digite o nome do aluno:");
                     string nome = Console.ReadLine();
 
@@ -40,13 +40,17 @@ class Secretaria
                     bool bolsista = Console.ReadLine().Equals("sim", StringComparison.OrdinalIgnoreCase);
 
                     CadastrarAluno(connection, nome, rgm, dataNascimento, curso, rg, genero, bolsista);
+              
                     break;
-                case "7": AtualizarAluno(connection); break;
-                case "8": RemoverAluno(connection); break;
-                case "0": running = false; break;
+            case "3": AtualizarAluno(connection); break;
+            case "4": RemoverAluno(connection); break;
+            case "0": running = false; return "MAIN_MENU";
                 default: Console.WriteLine("Opção inválida!"); break;
+              
             }
+          
         }
+      return null;
     }
     static void ExecutarComando(MySqlConnection connection, string sql, Dictionary<string, object> parameters = null)
     {

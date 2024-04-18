@@ -4,9 +4,17 @@ using System.Data;
 using MySql.Data.MySqlClient;
 using System.Globalization;
 
-class Biblioteca
+class Biblioteca : MenuTemplate
 {
-    public void showMenu(MySqlConnection connection, string key)
+  /*private void EmprestarLivro()
+  {
+  IReqLivro objEmprestar = new CriacaoEmpLivro().Factorymethod();
+  objEmprestar.Criar;
+
+  fazer um para venda
+  }*/
+    //public void showMenu(MySqlConnection connection, string key)
+    public override string ExecutarAcoes(MySqlConnection connection, string key)
     {
         bool running = true;
         while (running)
@@ -44,10 +52,13 @@ class Biblioteca
 
                 case "3": AtualizarLivro(connection); break;
                 case "4": RemoverLivro(connection); break;
-                case "0": running = false; break;
+            case "0": running = false; return "MAIN_MENU";
                 default: Console.WriteLine("Opção inválida!"); break;
+              
             }
+          
         }
+              return null;
     }
 
     //

@@ -17,20 +17,27 @@ class Program
                 Console.WriteLine("Conexão aberta com sucesso!\n\n");
             }
 
-            s1.showMenu("MAIN_MENU");
+            s1.ExecutarAcoes(connection, "MAIN_MENU");
             string key = Console.ReadLine();
-            switch (key)
+          do
             {
+                switch (key)
+                {
                 case "1":
-                    key = s1.showMenu("MENU_BIBLIOTECA");
-                    biblioteca.showMenu(connection, key);
-                    break;
+                        
+                        key = s1.ExecutarAcoes(connection, "MENU_BIBLIOTECA");
+                  biblioteca.ExecutarAcoes(connection, key);
+                        break;
                 case "2":
-                    key = s1.showMenu("MENU_SECRETARIA");
-                    secretaria.showMenu(connection, key);
-                    break;
-
-            }
+                        key = s1.ExecutarAcoes(connection, "MENU_SECRETARIA");
+                  secretaria.ExecutarAcoes(connection, key);
+                        break;
+                    default:
+                        Console.WriteLine("Opção inválida!");
+                        key = "MAIN_MENU";
+                        break;
+                }
+            } while (key != "0");
 
         }
         conexao.fecharConexao();
